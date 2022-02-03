@@ -20,6 +20,30 @@ module.exports = {
 }
 ```
 
+## Plugin Options
+
+### YouTube Ids
+
+Add the YouTube ids for the videos you would like to source!
+**Type:** An array of YouTube ids
+**Example:** `["Bk1jonYPFD4", "TzJfepDjpzM"]`
+**Default:** `[]`
+
+```
+// gatsby.config.js
+
+module.exports = {
+  plugins: [
+    {
+      resolve: "@raae/gatsby-source-youtube-oembed",
+      options: {
+        youTubeIds: ["Bk1jonYPFD4", "TzJfepDjpzM"],
+      },
+    },
+  ],
+};
+```
+
 ## Questions, Feedback and Suggestions
 
 If you have any questions, feedback or suggestions head on over to [discussions](https://github.com/queen-raae/gatsby-source-youtube-oembed/discussions).
