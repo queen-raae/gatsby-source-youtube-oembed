@@ -1,8 +1,8 @@
 {
-  "name": "@raae/gatsby-plugin-starter",
+  "name": "@raae/gatsby-source-youtube-oembed",
   "version": "1.6.1",
   "author": "@raae",
-  "description": "A starter to bootstrap your next Gatsby Plugin — automatic release to npm with semantic-release out of the box 📦 🪄",
+  "description": "Source YouTube information without an API key using the oEmbed endpoint 📺",
   "keywords": [
     "gatsby",
     "gatsby-plugin"
@@ -16,13 +16,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/queen-raae/gatsby-plugin-starter.git"
+    "url": "git+https://github.com/queen-raae/gatsby-source-youtube-oembed.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/queen-raae/gatsby-plugin-starter/issues"
+    "url": "https://github.com/queen-raae/gatsby-source-youtube-oembed/issues"
   },
-  "homepage": "https://github.com/queen-raae/gatsby-plugin-starter#readme",
+  "homepage": "https://github.com/queen-raae/gatsby-source-youtube-oembed#readme",
   "devDependencies": {},
   "dependencies": {},
   "peerDependencies": {

@@ -1,6 +1,6 @@
 module.exports = {
   plugins: {
-    resolve: "@raae/gatsby-plugin-starter",
+    resolve: "@raae/gatsby-source-youtube-oembed",
     options: {
       emoji: "pirate",
     },
