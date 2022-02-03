@@ -1,3 +1,5 @@
+## [0.1.1](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.0...v0.1.1) (2022-02-03)
+
 # [0.1.0](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.0.0...v0.1.0) (2022-02-03)
 
 ### Bug Fixes
