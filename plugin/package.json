@@ -24,7 +24,10 @@
   },
   "homepage": "https://github.com/queen-raae/gatsby-source-youtube-oembed#readme",
   "devDependencies": {},
-  "dependencies": {},
+  "dependencies": {
+    "axios": "0.25.0",
+    "gatsby-source-filesystem": "4.6.0"
+  },
   "peerDependencies": {
     "gatsby": "^3.0.0 || ^4.0.0"
   }

@@ -1,6 +1,7 @@
 import React from "react";
+import { graphql } from "gatsby";
 
-const IndexPage = () => {
+const IndexPage = ({ data }) => {
   return (
     <main>
       <header>
@@ -13,9 +14,22 @@ const IndexPage = () => {
             &nbsp;🎉
           </span>
         </h1>
+        <pre>{JSON.stringify(data, null, 4)}</pre>
       </header>
     </main>
   );
 };
+
+export const query = graphql`
+  {
+    allYouTube {
+      nodes {
+        oEmbed {
+          title
+        }
+      }
+    }
+  }
+`;
 
 export default IndexPage;

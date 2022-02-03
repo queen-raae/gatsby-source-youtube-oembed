@@ -3,8 +3,7 @@ module.exports = {
     {
       resolve: "@raae/gatsby-source-youtube-oembed",
       options: {
-        emoji: "pirate",
-        message: "Hello!!!",
+        youTubeIds: ["Bk1jonYPFD4", "TzJfepDjpzM"],
       },
     },
   ],
