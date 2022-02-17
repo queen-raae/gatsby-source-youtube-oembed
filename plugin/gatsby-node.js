@@ -25,6 +25,7 @@ const prepYouTubeNode = async (gatsbyUtils, id) => {
     getCache,
     createNodeId,
     createContentDigest,
+    reporter,
   } = gatsbyUtils;
 
   const youTubeNodeId = createNodeId(`you-tube-${id}`);
@@ -39,6 +40,8 @@ const prepYouTubeNode = async (gatsbyUtils, id) => {
     createNodeId,
   });
 
+  reporter.info(`Created YouTube File Node for ${node.youTubeId} thumbnail`);
+
   createNode({
     id: youTubeNodeId,
     oEmbed: embedData,
@@ -48,6 +51,8 @@ const prepYouTubeNode = async (gatsbyUtils, id) => {
       contentDigest: createContentDigest(embedData),
     },
   });
+
+  reporter.info(`Created YouTube Node for ${id}`);
 };
 
 exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
