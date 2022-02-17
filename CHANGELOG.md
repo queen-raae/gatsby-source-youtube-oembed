@@ -1,3 +1,9 @@
+## [0.1.4](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.3...v0.1.4) (2022-02-17)
+
+### Bug Fixes
+
+- improved sourcing of remote image files ([#3](https://github.com/queen-raae/gatsby-source-youtube-oembed/issues/3)) ([751cba5](https://github.com/queen-raae/gatsby-source-youtube-oembed/commit/751cba563aac7286173645149bc3ef899e9782dc))
+
 ## [0.1.3](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.2...v0.1.3) (2022-02-17)
 
 ## [0.1.2](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.1...v0.1.2) (2022-02-17)
