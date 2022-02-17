@@ -1,6 +1,6 @@
 {
   "name": "@raae/gatsby-source-youtube-oembed",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "@raae",
   "description": "Source YouTube information without an API key using the oEmbed endpoint 📺",
   "keywords": [
