@@ -8,11 +8,11 @@ _Source YouTube information without an API key using the oEmbed endpoint 📺_
 
 ### 1-on-1 Emergency Gatsby Call
 
-Are you stuck on a reef in the sharky waters around the Gatsby islands? Check out [1-on-1 Emergency Gatsby Call](https://queen.raae.codes/gatsby-emergency/) with Queen Raae to get friendly advice you can put into action immediately from a seasoned Gatsby developer.
+Are you stuck on a reef in the sharky waters around the Gatsby islands? Check out [1-on-1 Emergency Gatsby Call](https://queen.raae.codes/gatsby-emergency/?utm_source=readme&utm_campaign=source-youtube-oembed) with Queen Raae to get friendly advice you can put into action immediately from a seasoned Gatsby developer.
 
 ### Stay updated and get the most out of Gatsby
 
-Learn how to get the most out of Gatsby and **stay updated** on the plugin by [subscribing](https://queen.raae.codes/emails/?utm_source=readme&utm_campaign=svg-emoji-favicon) to daily emails from Queen Raae and Cap'n Ola.
+Learn how to get the most out of Gatsby and **stay updated** on the plugin by [subscribing](https://queen.raae.codes/emails/?utm_source=readme&utm_campaign=source-youtube-oembed) to daily emails from Queen Raae and Cap'n Ola.
 
 &nbsp;
 
