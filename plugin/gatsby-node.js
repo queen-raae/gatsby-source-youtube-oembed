@@ -3,9 +3,15 @@
 const axios = require("axios");
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
+const SPLIT_ASCII = ">>>";
+const IS_PROD = process.env.NODE_ENV === "production";
+const REFRESH_INTERVAL = IS_PROD ? 0 : 60000 * 5; // 60000 ms === 1 min
+
 exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
     youTubeIds: Joi.array().items(Joi.string()).required(),
+    refreshInterval: Joi.number().min(0).default(REFRESH_INTERVAL),
+    splitAscii: Joi.string().default(SPLIT_ASCII),
   });
 };
 
@@ -19,33 +25,51 @@ const fetchEmbed = async (id) => {
   return { ...data, url: ytUrl };
 };
 
-const prepYouTubeNode = async (gatsbyUtils, id) => {
+const prepYouTubeNode = async (gatsbyUtils, pluginOptions, ytId) => {
   const {
-    actions: { createNode },
+    actions: { createNode, touchNode },
     createNodeId,
     createContentDigest,
     reporter,
+    cache,
+    getNode,
   } = gatsbyUtils;
+  const { refreshInterval = REFRESH_INTERVAL, splitAscii } = pluginOptions;
 
-  const youTubeNodeId = createNodeId(`you-tube-${id}`);
-  const embedData = await fetchEmbed(id);
+  const ytCache = await cache.get(ytId);
+  const [existingNodeId, timestamp] = ytCache?.split(splitAscii) || [];
+  const existingNode = getNode(existingNodeId);
+  const existingNodeAge = Date.now() - timestamp;
 
-  createNode({
-    id: youTubeNodeId,
-    youTubeId: id,
-    oEmbed: embedData,
-    internal: {
-      type: `YouTube`,
-      contentDigest: createContentDigest(embedData),
-    },
-  });
+  if (existingNode && existingNodeAge <= refreshInterval) {
+    // Node already exists, make sure it stays around
+    touchNode(existingNode);
+    reporter.info(`Touched YouTube Node for ${ytId}`);
+  } else {
+    // Fetch oEmbed data and create node
+    const youTubeNodeId = createNodeId(`you-tube-${ytId}`);
+    const embedData = await fetchEmbed(ytId);
 
-  reporter.info(`Created YouTube Node for ${id}`);
+    createNode({
+      id: youTubeNodeId,
+      youTubeId: ytId,
+      oEmbed: embedData,
+      internal: {
+        type: `YouTube`,
+        contentDigest: createContentDigest(embedData),
+      },
+    });
+
+    await cache.set(ytId, `${youTubeNodeId}${splitAscii}${Date.now()}`);
+    reporter.info(`Created YouTube Node for ${ytId}`);
+  }
 };
 
 exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
   const { youTubeIds } = pluginOptions;
-  await Promise.all(youTubeIds.map((id) => prepYouTubeNode(gatsbyUtils, id)));
+  await Promise.all(
+    youTubeIds.map((id) => prepYouTubeNode(gatsbyUtils, pluginOptions, id))
+  );
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
