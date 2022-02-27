@@ -5,7 +5,7 @@ const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
 exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
-    youTubeIds: Joi.array().items(Joi.string()),
+    youTubeIds: Joi.array().items(Joi.string()).required(),
   });
 };
 
@@ -44,7 +44,7 @@ const prepYouTubeNode = async (gatsbyUtils, id) => {
 };
 
 exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
-  const { youTubeIds = [] } = pluginOptions;
+  const { youTubeIds } = pluginOptions;
   await Promise.all(youTubeIds.map((id) => prepYouTubeNode(gatsbyUtils, id)));
 };
 
