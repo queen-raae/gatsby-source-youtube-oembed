@@ -6,5 +6,7 @@ module.exports = {
         youTubeIds: ["Bk1jonYPFD4", "TzJfepDjpzM"],
       },
     },
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
   ],
 };
