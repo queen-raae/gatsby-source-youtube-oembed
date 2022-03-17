@@ -1,3 +1,9 @@
+## [0.1.5](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.4...v0.1.5) (2022-03-17)
+
+### Bug Fixes
+
+- add url to oEmbed ([c48397a](https://github.com/queen-raae/gatsby-source-youtube-oembed/commit/c48397afb93102bb0e7e99b3cca7f7f45b04e0c6))
+
 ## [0.1.4](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.3...v0.1.4) (2022-02-17)
 
 ### Bug Fixes
