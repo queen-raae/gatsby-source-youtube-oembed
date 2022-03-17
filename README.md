@@ -58,6 +58,29 @@ module.exports = {
 };
 ```
 
+### Refresh Interval
+
+Time to wait between fetching fresh oEmbed data.  
+**Type:** Time in milliseconds  
+**Example:** `60000`  
+**Default(dev):** `60000 * 5` (5 minutes)
+**Default(prod):** `0`
+
+```
+// gatsby.config.js
+
+module.exports = {
+  plugins: [
+    {
+      resolve: "@raae/gatsby-source-youtube-oembed",
+      options: {
+        refreshInterval: 60000,
+      },
+    },
+  ],
+};
+```
+
 ## Questions, Feedback and Suggestions
 
 If you have any questions, feedback or suggestions head on over to [discussions](https://github.com/queen-raae/gatsby-source-youtube-oembed/discussions).
