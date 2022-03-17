@@ -1,3 +1,9 @@
+# [0.2.0](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.5...v0.2.0) (2022-03-17)
+
+### Features
+
+- only create new youtube nodes on a configurable refresh interval ([de4993c](https://github.com/queen-raae/gatsby-source-youtube-oembed/commit/de4993c53b40970baad0fed7b114bc31dd955223))
+
 ## [0.1.5](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.4...v0.1.5) (2022-03-17)
 
 ### Bug Fixes
