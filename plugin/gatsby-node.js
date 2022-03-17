@@ -16,7 +16,7 @@ const fetchEmbed = async (id) => {
       url: ytUrl,
     },
   });
-  return data;
+  return { ...data, url: ytUrl };
 };
 
 const prepYouTubeNode = async (gatsbyUtils, id) => {
