@@ -2,6 +2,9 @@
 
 const axios = require("axios");
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
+const {
+  addRemoteFilePolyfillInterface,
+} = require("gatsby-plugin-utils/polyfill-remote-file");
 
 const SPLIT_ASCII = ">>>";
 const IS_PROD = process.env.NODE_ENV === "production";
@@ -78,29 +81,54 @@ exports.onCreateNode = async (gatsbyUtils) => {
   const { createNodeField, createNode } = actions;
 
   if (node.internal.type === `YouTube`) {
-    const imageFile = await createRemoteFileNode({
-      // The url of the remote file
+    const youTubeThumbnailNodeId = createNodeId(
+      `you-tube-thumnail-${node.youTubeId}`
+    );
+
+    createNode({
+      id: youTubeThumbnailNodeId,
+      youTubeId: node.youTubeId,
+      internal: {
+        type: `YouTubeThumbnail`,
+        contentDigest: node.internal.contentDigest,
+      },
       url: node.oEmbed.thumbnail_url,
-      parentNodeId: node.id,
-      getCache,
-      createNode,
-      createNodeId,
+      // placeholderUrl: `${file.url}?w=%width%&h=%height%`,
+      mimeType: "image/jpeg",
+      filename: node.youTubeId + ".jpg",
+      width: node.oEmbed.thumbnail_width,
+      height: node.oEmbed.thumbnail_height,
     });
 
     createNodeField({
       node,
       name: `thumbnailFileId`,
-      value: imageFile.id,
+      value: youTubeThumbnailNodeId,
     });
 
     reporter.info(`Created YouTube File Node for ${node.youTubeId} thumbnail`);
   }
 };
 
-exports.createSchemaCustomization = ({ actions }) => {
-  actions.createTypes(`
+exports.createSchemaCustomization = ({ actions, schema }) => {
+  actions.createTypes([
+    `
     type YouTube implements Node {
-      thumbnail: File @link(from: "fields.thumbnailFileId")
+      thumbnail: YouTubeThumbnail @link(from: "fields.thumbnailFileId")
     }
-  `);
+  `,
+    addRemoteFilePolyfillInterface(
+      schema.buildObjectType({
+        name: `YouTubeThumbnail`,
+        fields: {
+          youTubeId: "String!",
+        },
+        interfaces: [`Node`, `RemoteFile`],
+      }),
+      {
+        schema,
+        actions,
+      }
+    ),
+  ]);
 };

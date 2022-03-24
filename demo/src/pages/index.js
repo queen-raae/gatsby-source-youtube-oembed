@@ -19,13 +19,12 @@ const IndexPage = ({ data }) => {
         <div>
           {allYouTube.nodes.map((video) => {
             const { youTubeId, oEmbed, thumbnail } = video;
-            const image = getImage(thumbnail.childImageSharp.gatsbyImageData);
             return (
               <p key={youTubeId}>
                 <a href={oEmbed.url}>
                   <GatsbyImage
                     aspectRatio={16 / 9}
-                    image={image}
+                    image={thumbnail.gatsbyImage}
                     alt={oEmbed.title}
                   />
                 </a>
@@ -48,12 +47,13 @@ export const query = graphql`
           url
         }
         thumbnail {
-          childImageSharp {
-            gatsbyImageData(
-              transformOptions: { fit: COVER, cropFocus: CENTER }
-              aspectRatio: 1.77777778
-            )
-          }
+          gatsbyImage(
+            layout: FIXED
+            fit: COVER
+            cropFocus: CENTER
+            aspectRatio: 1.77777778
+            width: 480
+          )
         }
       }
     }
