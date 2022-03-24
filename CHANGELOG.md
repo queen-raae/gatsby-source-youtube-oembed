@@ -1,3 +1,9 @@
+# [0.2.0](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.5...v0.2.0) (2022-03-24)
+
+### Features
+
+- skip fetching fresh YouTube oEmbed data within refresh interval ([4ea6478](https://github.com/queen-raae/gatsby-source-youtube-oembed/commit/4ea64781450ce88521fb16727c86a5b98e761dfc))
+
 # [0.2.0](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.5...v0.2.0) (2022-03-17)
 
 ### Features
