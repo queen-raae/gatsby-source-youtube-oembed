@@ -1,17 +1,22 @@
-// https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/
-
 const axios = require("axios");
-const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
+const {
+  polyfillImageServiceDevRoutes,
+  addRemoteFilePolyfillInterface,
+} = require("gatsby-plugin-utils/polyfill-remote-file");
 
 const SPLIT_ASCII = ">>>";
 const IS_PROD = process.env.NODE_ENV === "production";
 const REFRESH_INTERVAL = IS_PROD ? 0 : 60000 * 5; // 60000 ms === 1 min
 
+exports.onCreateDevServer = ({ app }) => {
+  polyfillImageServiceDevRoutes(app);
+};
+
 exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
     youTubeIds: Joi.array().items(Joi.string()).required(),
     refreshInterval: Joi.number().min(0).default(REFRESH_INTERVAL),
-    // Will not document splitAscii
+    // Will not document splitAscii, only for internal use
     splitAscii: Joi.string().default(SPLIT_ASCII),
   });
 };
@@ -74,33 +79,60 @@ exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
-  const { node, actions, reporter, createNodeId, getCache } = gatsbyUtils;
+  const { node, actions, reporter, createNodeId } = gatsbyUtils;
   const { createNodeField, createNode } = actions;
 
   if (node.internal.type === `YouTube`) {
-    const imageFile = await createRemoteFileNode({
-      // The url of the remote file
+    const youTubeThumbnailNodeId = createNodeId(
+      `you-tube-thumbnail-${node.youTubeId}`
+    );
+
+    createNode({
+      id: youTubeThumbnailNodeId,
+      parent: node.id,
+      youTubeId: node.youTubeId,
       url: node.oEmbed.thumbnail_url,
-      parentNodeId: node.id,
-      getCache,
-      createNode,
-      createNodeId,
+      mimeType: "image/jpeg",
+      filename: node.youTubeId + ".jpg",
+      height: node.oEmbed.thumbnail_height,
+      width: node.oEmbed.thumbnail_width,
+      internal: {
+        type: `YouTubeThumbnail`,
+        contentDigest: node.internal.contentDigest,
+      },
     });
 
     createNodeField({
       node,
       name: `thumbnailFileId`,
-      value: imageFile.id,
+      value: youTubeThumbnailNodeId,
     });
 
-    reporter.info(`Created YouTube File Node for ${node.youTubeId} thumbnail`);
+    reporter.info(
+      `Created YouTubeThumbnail Node for ${node.youTubeId} thumbnail`
+    );
   }
 };
 
-exports.createSchemaCustomization = ({ actions }) => {
-  actions.createTypes(`
+exports.createSchemaCustomization = ({ actions, schema }) => {
+  actions.createTypes([
+    `
     type YouTube implements Node {
-      thumbnail: File @link(from: "fields.thumbnailFileId")
+      thumbnail: YouTubeThumbnail @link(from: "fields.thumbnailFileId")
     }
-  `);
+  `,
+    addRemoteFilePolyfillInterface(
+      schema.buildObjectType({
+        name: `YouTubeThumbnail`,
+        fields: {
+          youTubeId: "String!",
+        },
+        interfaces: [`Node`, `RemoteFile`],
+      }),
+      {
+        schema,
+        actions,
+      }
+    ),
+  ]);
 };
