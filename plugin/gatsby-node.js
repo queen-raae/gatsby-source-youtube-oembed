@@ -102,12 +102,6 @@ exports.onCreateNode = async (gatsbyUtils) => {
       },
     });
 
-    createNodeField({
-      node,
-      name: `thumbnailFileId`,
-      value: youTubeThumbnailNodeId,
-    });
-
     reporter.info(
       `Created YouTubeThumbnail Node for ${node.youTubeId} thumbnail`
     );
@@ -118,7 +112,7 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
   actions.createTypes([
     `
     type YouTube implements Node {
-      thumbnail: YouTubeThumbnail @link(from: "fields.thumbnailFileId")
+      thumbnail: YouTubeThumbnail @link(from: "youTubeId" by: "youTubeId")
     }
   `,
     addRemoteFilePolyfillInterface(
