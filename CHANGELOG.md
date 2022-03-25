@@ -1,3 +1,9 @@
+# [0.3.0](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.2.0...v0.3.0) (2022-03-25)
+
+### Features
+
+- add support Gatsby ImageCDN ([d878d35](https://github.com/queen-raae/gatsby-source-youtube-oembed/commit/d878d3502f80d267e74bbddb00312c625c4993d9))
+
 # [0.2.0](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.1.5...v0.2.0) (2022-03-24)
 
 ### Features
