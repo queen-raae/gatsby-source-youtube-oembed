@@ -6453,7 +6453,7 @@ gatsby-plugin-typescript@^4.12.0-next.0:
     "@babel/runtime" "^7.15.4"
     babel-plugin-remove-graphql-queries "^4.12.0-next.0"
 
-gatsby-plugin-utils@^3.4.2:
+gatsby-plugin-utils@3.4.2, gatsby-plugin-utils@^3.4.2:
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-utils/-/gatsby-plugin-utils-3.4.2.tgz#bdc66fd52c052c91af443981e1facbc097429dc7"
   integrity sha512-HkVR8BnEdc915pmY2L9wPwFgjq303ThMH9UtT+frDOPzn+GFjPlBF5+YGJ3tZaxH0ouwpnGTn3Pu37tcRZcctA==

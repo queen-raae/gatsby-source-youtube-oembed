@@ -26,6 +26,7 @@
   "devDependencies": {},
   "dependencies": {
     "axios": "0.25.0",
+    "gatsby-plugin-utils": "3.4.2",
     "gatsby-source-filesystem": "4.6.0"
   },
   "peerDependencies": {
