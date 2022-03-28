@@ -1,3 +1,9 @@
+## [0.3.1](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.3.0...v0.3.1) (2022-03-28)
+
+### Bug Fixes
+
+- add gatsby-plugin-utils dependency ([138a52b](https://github.com/queen-raae/gatsby-source-youtube-oembed/commit/138a52bbc511e9bf3edc72e9563b95b368d10c1a))
+
 # [0.3.0](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.2.0...v0.3.0) (2022-03-25)
 
 ### Features
