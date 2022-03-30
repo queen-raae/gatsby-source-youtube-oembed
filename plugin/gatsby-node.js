@@ -16,8 +16,6 @@ exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
     youTubeIds: Joi.array().items(Joi.string()).required(),
     refreshInterval: Joi.number().min(0).default(REFRESH_INTERVAL),
-    // Will not document splitAscii, only for internal use
-    splitAscii: Joi.string().default(SPLIT_ASCII),
   });
 };
 
@@ -40,11 +38,11 @@ const prepYouTubeNode = async (gatsbyUtils, pluginOptions, youTubeId) => {
     cache,
     getNode,
   } = gatsbyUtils;
-  const { refreshInterval = REFRESH_INTERVAL, splitAscii } = pluginOptions;
+  const { refreshInterval = REFRESH_INTERVAL } = pluginOptions;
 
-  const youTubeCache = await cache.get(youTubeId);
-  const [existingNodeId, timestamp] = youTubeCache?.split(splitAscii) || [];
-  const existingNode = getNode(existingNodeId);
+  const youTubeNodeId = createNodeId(`you-tube-${youTubeId}`);
+  const timestamp = await cache.get(youTubeNodeId);
+  const existingNode = getNode(youTubeNodeId);
   const existingNodeAge = Date.now() - timestamp;
 
   if (existingNode && existingNodeAge <= refreshInterval) {
@@ -66,7 +64,7 @@ const prepYouTubeNode = async (gatsbyUtils, pluginOptions, youTubeId) => {
       },
     });
 
-    await cache.set(youTubeId, `${youTubeNodeId}${splitAscii}${Date.now()}`);
+    await cache.set(youTubeNodeId, `${Date.now()}`);
     reporter.info(`Created YouTube Node for ${youTubeId}`);
   }
 };
@@ -80,7 +78,7 @@ exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
 
 exports.onCreateNode = async (gatsbyUtils) => {
   const { node, actions, reporter, createNodeId } = gatsbyUtils;
-  const { createNodeField, createNode } = actions;
+  const { createNode } = actions;
 
   if (node.internal.type === `YouTube`) {
     const youTubeThumbnailNodeId = createNodeId(
