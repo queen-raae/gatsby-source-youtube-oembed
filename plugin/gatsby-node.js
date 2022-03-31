@@ -49,15 +49,13 @@ const createYouTubeNode = async (gatsbyUtils, pluginOptions, youTubeId) => {
     createNodeId,
     createContentDigest,
     reporter,
-    cache,
     getNode,
   } = gatsbyUtils;
   const { refreshInterval = REFRESH_INTERVAL } = pluginOptions;
 
   const youTubeNodeId = createNodeId(`${YOUTUBE_TYPE} >>> ${youTubeId}`);
-  const timestamp = await cache.get(youTubeNodeId);
   const existingNode = getNode(youTubeNodeId);
-  const existingNodeAge = Date.now() - timestamp;
+  const existingNodeAge = Date.now() - existingNode?.timestamp;
 
   if (existingNode && existingNodeAge <= refreshInterval) {
     // Node already exists, make sure it stays around
@@ -71,13 +69,13 @@ const createYouTubeNode = async (gatsbyUtils, pluginOptions, youTubeId) => {
       id: youTubeNodeId,
       youTubeId: youTubeId,
       oEmbed: embedData,
+      timestamp: Date.now(),
       internal: {
         type: YOUTUBE_TYPE,
         contentDigest: createContentDigest(embedData),
       },
     });
 
-    await cache.set(youTubeNodeId, `${Date.now()}`);
     reporter.info(`Create YouTube Node for ${youTubeId}`);
   }
 };
