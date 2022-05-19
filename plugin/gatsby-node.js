@@ -21,11 +21,36 @@ exports.onCreateDevServer = ({ app }) => {
 };
 
 exports.createSchemaCustomization = (gatsbyUtils) => {
-  createYouTubeTypes(gatsbyUtils);
+  const { actions, schema } = gatsbyUtils;
+
+  const YouTubeType = `
+    type YouTube implements Node {
+      thumbnail: YouTubeThumbnail @link(from: "youTubeId" by: "youTubeId")
+    }
+  `;
+
+  const YouTubeThumbnailType = addRemoteFilePolyfillInterface(
+    schema.buildObjectType({
+      name: `YouTubeThumbnail`,
+      fields: {
+        youTubeId: "String!",
+      },
+      interfaces: [`Node`, `RemoteFile`],
+    }),
+    {
+      schema,
+      actions,
+    }
+  );
+
+  actions.createTypes([YouTubeType, YouTubeThumbnailType]);
 };
 
 exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
-  await createYouTubeNodes(gatsbyUtils, pluginOptions);
+  const { youTubeIds } = pluginOptions;
+  await Promise.all(
+    youTubeIds.map((id) => createYouTubeNode(gatsbyUtils, pluginOptions, id))
+  );
 };
 
 exports.onCreateNode = (gatsbyUtils) => {
@@ -34,13 +59,6 @@ exports.onCreateNode = (gatsbyUtils) => {
   if (node.internal.type === YOUTUBE_TYPE) {
     createYouTubeThumbnailNode(gatsbyUtils);
   }
-};
-
-const createYouTubeNodes = async (gatsbyUtils, pluginOptions) => {
-  const { youTubeIds } = pluginOptions;
-  await Promise.all(
-    youTubeIds.map((id) => createYouTubeNode(gatsbyUtils, pluginOptions, id))
-  );
 };
 
 const createYouTubeNode = async (gatsbyUtils, pluginOptions, youTubeId) => {
@@ -114,29 +132,4 @@ const createYouTubeThumbnailNode = (gatsbyUtils) => {
   });
 
   reporter.info(`Create YouTubeThumbnail Node for ${node.youTubeId}`);
-};
-
-const createYouTubeTypes = (gatsbyUtils) => {
-  const { actions, schema } = gatsbyUtils;
-
-  actions.createTypes([
-    `
-    type YouTube implements Node {
-      thumbnail: YouTubeThumbnail @link(from: "youTubeId" by: "youTubeId")
-    }
-  `,
-    addRemoteFilePolyfillInterface(
-      schema.buildObjectType({
-        name: `YouTubeThumbnail`,
-        fields: {
-          youTubeId: "String!",
-        },
-        interfaces: [`Node`, `RemoteFile`],
-      }),
-      {
-        schema,
-        actions,
-      }
-    ),
-  ]);
 };
