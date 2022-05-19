@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql } from "gatsby";
-import { GatsbyImage } from "gatsby-plugin-image";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const IndexPage = ({ data }) => {
   const { allYouTube } = data;
@@ -19,12 +19,14 @@ const IndexPage = ({ data }) => {
         <div>
           {allYouTube.nodes.map((video) => {
             const { youTubeId, oEmbed, thumbnail } = video;
+            console.log(video);
+            const gatsbyImage = getImage(thumbnail);
             return (
               <p key={youTubeId}>
                 <a href={oEmbed.url}>
                   <GatsbyImage
                     aspectRatio={16 / 9}
-                    image={thumbnail.gatsbyImage}
+                    image={gatsbyImage}
                     alt={oEmbed.title}
                   />
                 </a>
@@ -47,12 +49,13 @@ export const query = graphql`
           url
         }
         thumbnail {
-          gatsbyImage(
-            width: 480
-            aspectRatio: 1.77777778
-            fit: COVER
-            cropFocus: CENTER
-          )
+          childImageSharp {
+            gatsbyImageData(
+              width: 480
+              transformOptions: { fit: COVER, cropFocus: CENTER }
+              aspectRatio: 1.77777778
+            )
+          }
         }
       }
     }
