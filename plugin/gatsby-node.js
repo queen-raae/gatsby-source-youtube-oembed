@@ -3,6 +3,7 @@ const {
   polyfillImageServiceDevRoutes,
   addRemoteFilePolyfillInterface,
 } = require("gatsby-plugin-utils/polyfill-remote-file");
+const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
 const IS_PROD = process.env.NODE_ENV === "production";
 const REFRESH_INTERVAL = IS_PROD ? 0 : 60000 * 5; // 60000 ms === 1 min
@@ -48,6 +49,14 @@ exports.createSchemaCustomization = (gatsbyUtils, pluginOptions) => {
     );
 
     actions.createTypes([YouTubeType, YouTubeCdnThumbnailType]);
+  } else if (pluginOptions.thumbnails === "download") {
+    const YouTubeType = `
+      type YouTube implements Node {
+        thumbnail: File @link(from: "fields.thumbnailFileId" to: "id")
+      }
+    `;
+
+    actions.createTypes([YouTubeType]);
   }
 };
 
@@ -58,14 +67,15 @@ exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
   );
 };
 
-exports.onCreateNode = (gatsbyUtils, pluginOptions) => {
+exports.onCreateNode = async (gatsbyUtils, pluginOptions) => {
   const { node } = gatsbyUtils;
 
-  if (
-    node.internal.type === YOUTUBE_TYPE &&
-    pluginOptions.thumbnails === "cdn"
-  ) {
-    createYouTubeThumbnailNode(gatsbyUtils);
+  if (node.internal.type === YOUTUBE_TYPE) {
+    if (pluginOptions.thumbnails === "cdn") {
+      createYouTubeThumbnailNode(gatsbyUtils);
+    } else if (pluginOptions.thumbnails === "download") {
+      await createYouTubeThumbnailFileNode(gatsbyUtils);
+    }
   }
 };
 
@@ -140,4 +150,26 @@ const createYouTubeThumbnailNode = (gatsbyUtils) => {
   });
 
   reporter.info(`Create YouTubeThumbnail Node for ${node.youTubeId}`);
+};
+
+const createYouTubeThumbnailFileNode = async (gatsbyUtils) => {
+  const { node, reporter, createNodeId, getCache } = gatsbyUtils;
+  const { createNode, createNodeField } = gatsbyUtils.actions;
+
+  const imageFile = await createRemoteFileNode({
+    // The url of the remote file
+    url: node.oEmbed.thumbnail_url,
+    parentNodeId: node.id,
+    getCache,
+    createNode,
+    createNodeId,
+  });
+
+  createNodeField({
+    node,
+    name: `thumbnailFileId`,
+    value: imageFile.id,
+  });
+
+  reporter.info(`Created YouTube File Node for ${node.youTubeId} thumbnail`);
 };
