@@ -13,6 +13,7 @@ exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
     youTubeIds: Joi.array().items(Joi.string()).required(),
     refreshInterval: Joi.number().min(0).default(REFRESH_INTERVAL),
+    thumbnails: Joi.string().valid("none", "cdn", "download").default("cdn"),
   });
 };
 
