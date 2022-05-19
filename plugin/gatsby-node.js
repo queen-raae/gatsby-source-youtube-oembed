@@ -17,34 +17,38 @@ exports.pluginOptionsSchema = ({ Joi }) => {
   });
 };
 
-exports.onCreateDevServer = ({ app }) => {
-  polyfillImageServiceDevRoutes(app);
+exports.onCreateDevServer = ({ app }, pluginOptions) => {
+  if (pluginOptions.thumbnails === "cdn") {
+    polyfillImageServiceDevRoutes(app);
+  }
 };
 
-exports.createSchemaCustomization = (gatsbyUtils) => {
+exports.createSchemaCustomization = (gatsbyUtils, pluginOptions) => {
   const { actions, schema } = gatsbyUtils;
 
-  const YouTubeType = `
-    type YouTube implements Node {
-      thumbnail: YouTubeThumbnail @link(from: "youTubeId" by: "youTubeId")
-    }
-  `;
+  if (pluginOptions.thumbnails === "cdn") {
+    const YouTubeType = `
+      type YouTube implements Node {
+        thumbnail: YouTubeThumbnail @link(from: "youTubeId" by: "youTubeId")
+      }
+    `;
 
-  const YouTubeThumbnailType = addRemoteFilePolyfillInterface(
-    schema.buildObjectType({
-      name: `YouTubeThumbnail`,
-      fields: {
-        youTubeId: "String!",
-      },
-      interfaces: [`Node`, `RemoteFile`],
-    }),
-    {
-      schema,
-      actions,
-    }
-  );
+    const YouTubeCdnThumbnailType = addRemoteFilePolyfillInterface(
+      schema.buildObjectType({
+        name: `YouTubeThumbnail`,
+        fields: {
+          youTubeId: "String!",
+        },
+        interfaces: [`Node`, `RemoteFile`],
+      }),
+      {
+        schema,
+        actions,
+      }
+    );
 
-  actions.createTypes([YouTubeType, YouTubeThumbnailType]);
+    actions.createTypes([YouTubeType, YouTubeCdnThumbnailType]);
+  }
 };
 
 exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
@@ -54,10 +58,13 @@ exports.sourceNodes = async (gatsbyUtils, pluginOptions) => {
   );
 };
 
-exports.onCreateNode = (gatsbyUtils) => {
+exports.onCreateNode = (gatsbyUtils, pluginOptions) => {
   const { node } = gatsbyUtils;
 
-  if (node.internal.type === YOUTUBE_TYPE) {
+  if (
+    node.internal.type === YOUTUBE_TYPE &&
+    pluginOptions.thumbnails === "cdn"
+  ) {
     createYouTubeThumbnailNode(gatsbyUtils);
   }
 };
