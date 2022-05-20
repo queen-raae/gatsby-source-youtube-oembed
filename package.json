@@ -1,13 +1,16 @@
 {
   "private": true,
   "workspaces": [
-    "demo",
+    "demo-*",
     "plugin"
   ],
   "scripts": {
-    "develop": "yarn workspace demo develop",
-    "clean": "yarn workspace demo clean",
-    "build": "yarn workspace demo build",
+    "demo-cdn:develop": "yarn workspace demo-cdn develop --p 8000",
+    "demo-cdn:clean": "yarn workspace demo-cdn clean",
+    "demo-download:develop": "yarn workspace demo-download develop  --p 8001",
+    "demo-download:clean": "yarn workspace demo-download clean",
+    "develop": "yarn demo-cdn:develop & yarn demo-download:develop",
+    "clean": "yarn demo-cdn:clean & yarn demo-download:clean",
     "semantic-release": "semantic-release",
     "prepare": "husky install"
   },
