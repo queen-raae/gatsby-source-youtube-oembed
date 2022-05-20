@@ -9,7 +9,7 @@ module.exports = {
           "UsSJ_QNp6uo",
           "TX5XPuHhz9o",
         ],
-        thumbnails: "download",
+        thumbnailMode: "download",
       },
     },
     "gatsby-plugin-sharp",

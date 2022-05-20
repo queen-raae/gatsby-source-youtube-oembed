@@ -14,12 +14,12 @@ exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
     youTubeIds: Joi.array().items(Joi.string()).required(),
     refreshInterval: Joi.number().min(0).default(REFRESH_INTERVAL),
-    thumbnails: Joi.string().valid("none", "cdn", "download").default("cdn"),
+    thumbnailMode: Joi.string().valid("none", "cdn", "download").default("cdn"),
   });
 };
 
 exports.onCreateDevServer = ({ app }, pluginOptions) => {
-  if (pluginOptions.thumbnails === "cdn") {
+  if (pluginOptions.thumbnailMode === "cdn") {
     polyfillImageServiceDevRoutes(app);
   }
 };
@@ -27,7 +27,7 @@ exports.onCreateDevServer = ({ app }, pluginOptions) => {
 exports.createSchemaCustomization = (gatsbyUtils, pluginOptions) => {
   const { actions, schema } = gatsbyUtils;
 
-  if (pluginOptions.thumbnails === "cdn") {
+  if (pluginOptions.thumbnailMode === "cdn") {
     const YouTubeType = `
       type YouTube implements Node {
         thumbnail: YouTubeThumbnail @link(from: "youTubeId" by: "youTubeId")
@@ -49,7 +49,7 @@ exports.createSchemaCustomization = (gatsbyUtils, pluginOptions) => {
     );
 
     actions.createTypes([YouTubeType, YouTubeCdnThumbnailType]);
-  } else if (pluginOptions.thumbnails === "download") {
+  } else if (pluginOptions.thumbnailMode === "download") {
     const YouTubeType = `
       type YouTube implements Node {
         thumbnail: File @link(from: "fields.thumbnailFileId" to: "id")
@@ -71,9 +71,9 @@ exports.onCreateNode = async (gatsbyUtils, pluginOptions) => {
   const { node } = gatsbyUtils;
 
   if (node.internal.type === YOUTUBE_TYPE) {
-    if (pluginOptions.thumbnails === "cdn") {
+    if (pluginOptions.thumbnailMode === "cdn") {
       createYouTubeThumbnailNode(gatsbyUtils);
-    } else if (pluginOptions.thumbnails === "download") {
+    } else if (pluginOptions.thumbnailMode === "download") {
       await createYouTubeThumbnailFileNode(gatsbyUtils);
     }
   }
