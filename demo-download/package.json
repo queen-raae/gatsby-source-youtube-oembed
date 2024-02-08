@@ -1,0 +1,27 @@
+{
+  "name": "demo-download",
+  "version": "1.0.0",
+  "private": true,
+  "description": "@raae/gatsby-source-youtube-oembed demo",
+  "author": "@raae",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "dependencies": {
+    "@raae/gatsby-source-youtube-oembed": "*",
+    "gatsby": "4",
+    "gatsby-plugin-gatsby-cloud": "4.11.0",
+    "gatsby-plugin-image": "2.10.1",
+    "gatsby-plugin-sharp": "4.10.2",
+    "gatsby-transformer-sharp": "4.10.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  }
+}
