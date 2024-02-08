@@ -1,3 +1,9 @@
+# [0.4.0](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.3.1...v0.4.0) (2024-02-08)
+
+### Features
+
+- add support for non gatsby image cdn thumbnails ([#11](https://github.com/queen-raae/gatsby-source-youtube-oembed/issues/11)) ([41cab6d](https://github.com/queen-raae/gatsby-source-youtube-oembed/commit/41cab6d4a082ae59f68327662fb945528ff7ee7b))
+
 ## [0.3.1](https://github.com/queen-raae/gatsby-source-youtube-oembed/compare/v0.3.0...v0.3.1) (2022-03-28)
 
 ### Bug Fixes
